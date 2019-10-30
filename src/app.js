@@ -65,7 +65,7 @@ App = {
             name: temp,
             dob: temp,
             weight: 100,
-            allergies: [temp, temp]
+            allergies: temp
         };
 
        
