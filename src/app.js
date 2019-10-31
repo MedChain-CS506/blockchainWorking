@@ -270,6 +270,13 @@ App = {
                 console.log(err.message);
             });
         });
+    },
+
+    getString: function(str){
+
+        var newStr = str.split("-");
+        return newStr;
+
     }
 
 };
