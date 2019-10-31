@@ -317,8 +317,8 @@ App = {
     },
 
     format_medical_data: function (data) {
-        data.ids = App.getString(data.ids);
-        data.doctor_ids = App.getString(data.doctor_ids);
+        data.ids = App.getString(data.ids).map(Number);
+        data.doctor_ids = App.getString(data.doctor_ids).map(Number);
         data.symptoms = App.getString(data.symptoms);
         data.disease = App.getString(data.disease);
         data.medicine = App.getString(data.medicine);
