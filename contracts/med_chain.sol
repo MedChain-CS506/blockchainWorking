@@ -139,11 +139,12 @@ contract med_chain {
         );
     }
     
-    function doctor_last_prescription(uint aadhaar) view public returns (string memory, uint, string memory){
+    function doctor_last_prescription(uint aadhaar) view public returns (string memory, uint, string memory, string memory){
         return (
             prescription_id_mapping[paitent_aadhaar_mapping[aadhaar].prescription_ids[paitent_aadhaar_mapping[aadhaar].prescription_ids.length - 1]].medicine,
             prescription_id_mapping[paitent_aadhaar_mapping[aadhaar].prescription_ids[paitent_aadhaar_mapping[aadhaar].prescription_ids.length - 1]].doctor_id,
-            prescription_id_mapping[paitent_aadhaar_mapping[aadhaar].prescription_ids[paitent_aadhaar_mapping[aadhaar].prescription_ids.length - 1]].symptoms
+            prescription_id_mapping[paitent_aadhaar_mapping[aadhaar].prescription_ids[paitent_aadhaar_mapping[aadhaar].prescription_ids.length - 1]].symptoms,
+            prescription_id_mapping[paitent_aadhaar_mapping[aadhaar].prescription_ids[paitent_aadhaar_mapping[aadhaar].prescription_ids.length - 1]].timestamp_prescribed
         );
     }
     
