@@ -255,10 +255,11 @@ App = {
                         });
                     }).then(function (res) {
                         console.log("Inside 2nd");
-                        App.paitent_page_data.last_pres_medicine = res[0];
-                        App.paitent_page_data.last_pres_doc_id = res[1].c[0];
-                        App.paitent_page_data.last_pres_symptoms = res[2];
-                        App.paitent_page_data.last_pres_timestamp = res[3];
+                        App.paitent_page_data.last_pres_id = res[0].c[0];
+                        App.paitent_page_data.last_pres_medicine = res[1];
+                        App.paitent_page_data.last_pres_doc_id = res[2].c[0];
+                        App.paitent_page_data.last_pres_symptoms = res[3];
+                        App.paitent_page_data.last_pres_timestamp = res[4];
                         console.log(App.paitent_page_data);                        
                     }).catch(function (err) {
                         console.log(err.message);
