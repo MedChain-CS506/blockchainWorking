@@ -39,13 +39,14 @@ App = {
 
     add_paitent: function () {
         var add_paitent_instance;
-        var temp = web3.toAscii("Name");
+        var temp = "temp";
         var samplePatient = {
             aadhaar: 19,
             age: 20,
             name: temp,
             dob: temp,
             weight: 100,
+            sex: temp,
             allergies: temp
         };
 
@@ -58,7 +59,7 @@ App = {
                 add_paitent_instance = instance;
                 console.log(add_paitent_instance);
                 return add_paitent_instance.add_paitent(samplePatient.aadhaar, samplePatient.age, samplePatient.name,
-                    samplePatient.dob, samplePatient.weight, {
+                    samplePatient.dob, samplePatient.weight, samplePatient.sex, samplePatient.allergies, {
                         from: account
                     });
             }).catch(function (err) {

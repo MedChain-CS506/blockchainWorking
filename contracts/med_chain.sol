@@ -15,21 +15,21 @@ contract med_chain {
     struct paitent {
         uint aadhaar;
         uint age;
-        bytes32 name;
-        bytes32 dob;
+        string name;
+        string dob;
         uint weight;
-        bytes32[] allergies;
-        bytes32[] disease_history;
+        string allergies;
+        string disease_history;
         uint[] prescription_ids;
         uint[] doctor_ids;
-        address paitent_address;
+        string sex;
     }
 
     struct doctor {
         uint id;
         uint license_no;
-        bytes32 name;
-        bytes32 specialisation;
+        string name;
+        string specialisation;
         address doctor_address;
     }
 
@@ -42,12 +42,12 @@ contract med_chain {
     struct prescription {
         uint doctor_id;
         uint paitent_aadhaar;
-        bytes32 disease;
-        bytes32 symptoms;
-        bytes32 medicine;
-        bytes32 timestamp_prescribed;
+        string disease;
+        string symptoms;
+        string medicine;
+        string timestamp_prescribed;
         uint pharmacy_id;
-        bytes32 timestamp_marked;
+        string timestamp_marked;
         bool marked;
     }
 
@@ -84,19 +84,17 @@ contract med_chain {
         }
     }
 
-    function add_paitent(uint aadhaar, uint age, bytes32 name, bytes32 dob, uint weight) public {
+    function add_paitent(uint aadhaar, uint age, string memory name, string memory dob, uint weight, string memory sex, string memory allergies) public {
         paitent_aadhaar_mapping[aadhaar].aadhaar = aadhaar;
         paitent_aadhaar_mapping[aadhaar].age = age;
         paitent_aadhaar_mapping[aadhaar].name = name;
         paitent_aadhaar_mapping[aadhaar].dob = dob;
         paitent_aadhaar_mapping[aadhaar].weight = weight;
-       // for(uint i = 0; i < allergies.length; i++) {
-        //    paitent_aadhaar_mapping[aadhaar].allergies[i]  = (allergies[i]);
-       // }
-        paitent_aadhaar_mapping[aadhaar].paitent_address = msg.sender;
+        paitent_aadhaar_mapping[aadhaar].sex = sex;
+        paitent_aadhaar_mapping[aadhaar].allergies = allergies;
     }
 
-    function add_doctor(uint id, uint license_no, bytes32 name, bytes32 specialisation, address d_addr) public {
+    function add_doctor(uint id, uint license_no, string memory name, string memory specialisation, address d_addr) public {
         doctor_id_mapping[id].id = id;
         doctor_id_mapping[id].license_no = license_no;
         doctor_id_mapping[id].name = name;
@@ -110,31 +108,19 @@ contract med_chain {
         pharmacy_id_mapping[id].phar_addr = p_addr;
     }
 
-    function lookup_paitent(uint aadhaar) view public returns (uint, uint, bytes32, bytes32, uint, bytes32[] memory)
-    {
-       // bytes32[] memory allergies;
-        bytes32[] memory disease;
-
-        //for (uint i = 0; i < paitent_aadhaar_mapping[aadhaar].allergies.length; i++) {
-       //     allergies[i] = paitent_aadhaar_mapping[aadhaar].allergies[i];
-        //}
-
-        for (uint i = 0; i < paitent_aadhaar_mapping[aadhaar].disease_history.length; i++) {
-            disease[i] = paitent_aadhaar_mapping[aadhaar].disease_history[i];
-        }
-         
+    function lookup_paitent(uint aadhaar) view public returns (uint, uint, string memory, string memory, string memory, uint, string memory) {         
         return (
             paitent_aadhaar_mapping[aadhaar].aadhaar,
             paitent_aadhaar_mapping[aadhaar].age,
             paitent_aadhaar_mapping[aadhaar].name,
+            paitent_aadhaar_mapping[aadhaar].sex,
             paitent_aadhaar_mapping[aadhaar].dob,
             paitent_aadhaar_mapping[aadhaar].weight,
-            //allergies,
-            disease
+            paitent_aadhaar_mapping[aadhaar].allergies
         );
     }
     
-    function doctor_last_prescription(uint aadhaar) view public returns (bytes32, uint, bytes32){
+    function doctor_last_prescription(uint aadhaar) view public returns (string memory, uint, string memory){
         return (
             prescription_id_mapping[paitent_aadhaar_mapping[aadhaar].prescription_ids[paitent_aadhaar_mapping[aadhaar].prescription_ids.length - 1]].medicine,
             prescription_id_mapping[paitent_aadhaar_mapping[aadhaar].prescription_ids[paitent_aadhaar_mapping[aadhaar].prescription_ids.length - 1]].doctor_id,
@@ -143,46 +129,21 @@ contract med_chain {
     }
     
 
-    function medical_history(uint aadhaar) view public returns (uint[] memory, bytes32[] memory, bytes32[] memory, bytes32[] memory, bytes32[] memory) {
-        
-        uint[] memory doctor_id;
-        bytes32[] memory disease;
-        bytes32[] memory symptoms;
-        bytes32[] memory medicine;
-        bytes32[] memory timestamp_prescribed;
-        
-        for (uint i = 0; i < paitent_aadhaar_mapping[aadhaar].prescription_ids.length ; i++) {
-            
-            uint presc_id = paitent_aadhaar_mapping[aadhaar].prescription_ids[i];
-            
-            doctor_id[i] = prescription_id_mapping[presc_id].doctor_id;
-            disease[i] = prescription_id_mapping[presc_id].disease;
-            symptoms[i] = prescription_id_mapping[presc_id].symptoms;
-            medicine[i] = prescription_id_mapping[presc_id].medicine;
-            timestamp_prescribed[i] = prescription_id_mapping[presc_id].timestamp_prescribed;
-        
-        }
+    function medical_history() public {
 
-        return (
-            doctor_id,
-            disease,
-            symptoms,
-            medicine,
-            timestamp_prescribed
-        );
     }
 
     function add_prescription() public {
         
     }
 
-    function last_prescription(uint aadhaar) view public returns (bytes32) {
+    function last_prescription(uint aadhaar) view public returns (string memory) {
         uint last_presc_id = paitent_aadhaar_mapping[aadhaar].prescription_ids[paitent_aadhaar_mapping[aadhaar].prescription_ids.length -1];
         return ( prescription_id_mapping[last_presc_id].medicine);
                 
     }
 
-    function mark_prescription(uint aadhaar, uint pharmacy_id, bytes32 time) public {
+    function mark_prescription(uint aadhaar, uint pharmacy_id, string memory time) public {
         uint last_presc_id = paitent_aadhaar_mapping[aadhaar].prescription_ids[paitent_aadhaar_mapping[aadhaar].prescription_ids.length -1];
         prescription_id_mapping[last_presc_id].pharmacy_id = pharmacy_id;
         prescription_id_mapping[last_presc_id].marked = true;
