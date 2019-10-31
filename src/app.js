@@ -1,26 +1,22 @@
-//import { lookup } from "dns";
 var contractMed = null;
+
 App = {
     web3Provider: null,
     contracts: {},
+    med_chain: null,
 
-    initWeb3: async function() {
+    initWeb3: async function () {
         if (window.ethereum) {
             App.web3Provider = window.ethereum;
             try {
-                // Request account access
                 await window.ethereum.enable();
             } catch (error) {
-                // User denied account access...
                 console.error("User denied account access")
             }
         }
-        // Legacy dapp browsers...
         else if (window.web3) {
             App.web3Provider = window.web3.currentProvider;
-        }
-        // If no injected web3 instance is detected, fall back to Ganache
-        else {
+        } else {
             App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
         }
         web3 = new Web3(App.web3Provider);
@@ -29,40 +25,20 @@ App = {
         return App.initContract();
     },
 
-    initContract: function() {
-        $.getJSON('./med_chain.json', function(data) {
-            // Get the necessary contract artifact file and instantiate it with truffle-contract
+    initContract: function () {
+        $.getJSON('./med_chain.json', function (data) {
             var med_chain_Artifact = data;
-            //console.log(med_chain_Artifact);
             App.contracts.med_chain = TruffleContract(med_chain_Artifact);
-
             App.contracts.med_chain.setProvider(App.web3Provider);
-            console.log(App.contracts.med_chain);
-           // App.med_chain = TruffleContract(med_chain_Artifact);
-           // App.med_chain.setProvider(App.web3Provider);
+            App.med_chain = TruffleContract(med_chain_Artifact);
+            App.med_chain.setProvider(App.web3Provider);
             contractMed = App.contracts.med_chain;
-
-            console.log(contractMed);
-            //console.log(App.contracts.med_chain.deployed());
-            document.getElementById("testAddPatient").addEventListener("click", function(){
-                
-                document.getElementById("paitentdata").innerHTML = "works";
-                return App.add_paitent();
-            });
-          //  return App.add_paitent();
-           // return App.lookup_paitent();
-            // Set the provider for our contract
-
-
-            // Use our contract to retrieve and mark the adopted pets
-
         });
     },
 
-    add_paitent: function() {
-        var add_paitent_instance;
-      //  var contract = App.contracts.med_chain;
 
+    add_paitent: function () {
+        var add_paitent_instance;
         var temp = web3.toAscii("Name");
         var samplePatient = {
             aadhaar: 19,
@@ -70,77 +46,56 @@ App = {
             name: temp,
             dob: temp,
             weight: 100,
-            allergies: [temp, temp]
+            allergies: temp
         };
 
-       
-        console.log(contractMed);
-        web3.eth.getAccounts(function(error, accounts) {
+        web3.eth.getAccounts(function (error, accounts) {
             if (error) {
-
                 console.log(error);
             }
-
             var account = accounts[0];
-           // console.log(App.contracts.med_chain);
-            //App.med_chain = App.med_chain.deployed();
-            console.log(contractMed);
-            contractMed.deployed().then(function(instance) {
+            contractMed.deployed().then(function (instance) {
                 add_paitent_instance = instance;
                 console.log(add_paitent_instance);
-                // Execute adopt as a transaction by sending account
                 return add_paitent_instance.add_paitent(samplePatient.aadhaar, samplePatient.age, samplePatient.name,
                     samplePatient.dob, samplePatient.weight, {
                         from: account
                     });
-            }).then(function(result) {
-                return App.add_paitent();
-            }).catch(function(err) {
+            }).catch(function (err) {
                 console.log(err.message);
             });
         });
     },
-    lookup_paitent: function() {
-        var lookup_instance;
-      //  var contract = App.contracts.med_chain;
 
-        var temp = web3.toAscii("Name");
-        var aadhaarSample = 19;
-       
-
-        web3.eth.getAccounts(function(error, accounts) {
+    lookup_paitent: function(){
+        var lookup_paitent_instance;
+        var samplePatient = {
+            aadhaar: 19,
+            age: 20
+        };
+        web3.eth.getAccounts(function (error, accounts) {
             if (error) {
-
                 console.log(error);
             }
-
             var account = accounts[0];
-            console.log(App.contracts.med_chain);
-
-            
-            //App.med_chain = App.med_chain.deployed();
-           // console.log(A);
-           contractMed.deployed().then(function(instance) {
-                lookup_instance = instance;
-                console.log(lookup_instance);
-                // Execute adopt as a transaction by sending account
-                return lookup_instance.lookup_paitent(aadhaarSample, {
+            contractMed.deployed().then(function (instance) {
+                lookup_paitent_instance = instance;
+                console.log(lookup_paitent_instance);
+                return lookup_paitent_instance.lookup_paitent(samplePatient.aadhaar, {
                         from: account
                     });
-            }).then(function(result) {
-                return App.lookup_paitent();
-            }).catch(function(err) {
+            }).then( function(res){
+                console.log(res[0]);
+            }).catch(function (err) {
                 console.log(err.message);
             });
         });
     }
 
-
 };
 
-
-$(function() {
-    $(window).on("load", function() {
+$(function () {
+    $(window).on("load", function () {
         App.initWeb3();
     });
 });
