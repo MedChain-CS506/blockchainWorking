@@ -86,32 +86,19 @@ contract med_chain {
         }
     }
 
-    function strConcat(string memory _a, string memory _b, string memory _c) internal pure returns (string memory _concatenatedString) {
-        string memory _d = "";
-        string memory _e = "";
-        bytes memory _ba = bytes(_a);
-        bytes memory _bb = bytes(_b);
-        bytes memory _bc = bytes(_c);
-        bytes memory _bd = bytes(_d);
-        bytes memory _be = bytes(_e);
-        string memory abcde = new string(_ba.length + _bb.length + _bc.length + _bd.length + _be.length);
+    function strConcat(string memory _a,  string memory _c) internal pure returns (string memory _concatenatedString) {
+        string memory _b = "-";
+        string memory abcde = new string(bytes(_a).length + bytes(_b).length + bytes(_c).length );
         bytes memory babcde = bytes(abcde);
         uint k = 0;
-        uint i = 0;
-        for (i = 0; i < _ba.length; i++) {
-            babcde[k++] = _ba[i];
+        for (uint i = 0; i < bytes(_a).length; i++) {
+            babcde[k++] = bytes(_a)[i];
         }
-        for (i = 0; i < _bb.length; i++) {
-            babcde[k++] = _bb[i];
+        for (uint i = 0; i < bytes(_b).length; i++) {
+            babcde[k++] = bytes(_b)[i];
         }
-        for (i = 0; i < _bc.length; i++) {
-            babcde[k++] = _bc[i];
-        }
-        for (i = 0; i < _bd.length; i++) {
-            babcde[k++] = _bd[i];
-        }
-        for (i = 0; i < _be.length; i++) {
-            babcde[k++] = _be[i];
+        for (uint i = 0; i < bytes(_c).length; i++) {
+            babcde[k++] = bytes(_c)[i];
         }
         return string(babcde);
     }
@@ -180,16 +167,16 @@ contract med_chain {
     }
 
     function medical_history(uint aadhaar) view public returns ( string memory, string memory, string memory) {
-        string memory disease = "Start-";
-        string memory medicine = "Start-";
-        string memory timestamp_prescribed = "Start-";
-        for(uint i = 0; i <= paitent_aadhaar_mapping[aadhaar].prescription_ids.length; i++ ){
-            strConcat(disease, "-", prescription_id_mapping[paitent_aadhaar_mapping[aadhaar].prescription_ids[i]].disease);
-            strConcat(medicine, "-",prescription_id_mapping[paitent_aadhaar_mapping[aadhaar].prescription_ids[i]].medicine);
-            strConcat(timestamp_prescribed, "-", prescription_id_mapping[paitent_aadhaar_mapping[aadhaar].prescription_ids[i]].timestamp_prescribed);
+        string memory dis = "-";
+        string memory med = "-";
+        string memory time = "-";
+        for(uint i = 0; i < paitent_aadhaar_mapping[aadhaar].prescription_ids.length; i++ ){
+            dis = strConcat(dis, prescription_id_mapping[paitent_aadhaar_mapping[aadhaar].prescription_ids[i]].disease);
+            med = strConcat(med, prescription_id_mapping[paitent_aadhaar_mapping[aadhaar].prescription_ids[i]].medicine);
+            time = strConcat(time, prescription_id_mapping[paitent_aadhaar_mapping[aadhaar].prescription_ids[i]].timestamp_prescribed);
         }
 
-        return(disease, medicine, timestamp_prescribed);
+        return(dis, med, time);
     }
 
     function add_prescription(uint d_id, uint p_aadhar, string memory disease, string memory symptoms, string memory medicine, string memory time) public {
