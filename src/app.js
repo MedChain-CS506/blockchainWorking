@@ -124,7 +124,7 @@ App = {
     },
 
     doctor_last_prescription: function(){
-        var lookup_paitent_instance;
+        var doctor_last_prescription_instance;
         var samplePatient = {
             aadhaar: 19,
             age: 20
@@ -135,9 +135,9 @@ App = {
             }
             var account = accounts[0];
             contractMed.deployed().then(function (instance) {
-                lookup_paitent_instance = instance;
-                console.log(lookup_paitent_instance);
-                return lookup_paitent_instance.doctor_last_prescription(samplePatient.aadhaar, {
+                doctor_last_prescription_instance = instance;
+                console.log(doctor_last_prescription_instance);
+                return doctor_last_prescription_instance.doctor_last_prescription(samplePatient.aadhaar, {
                         from: account
                     });
             }).then( function(res){
@@ -149,7 +149,7 @@ App = {
     },
 
     last_prescription: function(){
-        var lookup_paitent_instance;
+        var last_prescription_instance;
         var samplePatient = {
             aadhaar: 19,
             age: 20
@@ -160,9 +160,9 @@ App = {
             }
             var account = accounts[0];
             contractMed.deployed().then(function (instance) {
-                lookup_paitent_instance = instance;
-                console.log(lookup_paitent_instance);
-                return lookup_paitent_instance.last_prescription(samplePatient.aadhaar, {
+                last_prescription_instance = instance;
+                console.log(last_prescription_instance);
+                return last_prescription_instance.last_prescription(samplePatient.aadhaar, {
                         from: account
                     });
             }).then( function(res){
