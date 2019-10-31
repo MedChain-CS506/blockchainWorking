@@ -165,6 +165,21 @@ contract med_chain {
         }
         return string(bstr);
     }
+    
+    function medical_history_details(uint aadhaar) view public returns ( string memory, string memory, string memory) {
+        string memory ids = "-";
+        string memory d_ids = "-";
+        string memory symptoms = "-";
+
+        for(uint i = 0; i < paitent_aadhaar_mapping[aadhaar].prescription_ids.length; i++ ){
+            ids = strConcat(ids, uint2str(prescription_id_mapping[paitent_aadhaar_mapping[aadhaar].prescription_ids[i]].id));
+            d_ids = strConcat(d_ids, uint2str(prescription_id_mapping[paitent_aadhaar_mapping[aadhaar].prescription_ids[i]].doctor_id));
+            symptoms = strConcat(symptoms, prescription_id_mapping[paitent_aadhaar_mapping[aadhaar].prescription_ids[i]].symptoms);
+
+        }
+
+        return(ids, d_ids, symptoms);
+    }
 
     function medical_history(uint aadhaar) view public returns ( string memory, string memory, string memory) {
         string memory dis = "-";
@@ -188,6 +203,7 @@ contract med_chain {
         prescription_id_mapping[current_pres_id].symptoms = symptoms;
         prescription_id_mapping[current_pres_id].medicine = medicine;
         prescription_id_mapping[current_pres_id].timestamp_prescribed = time;
+        current_pres_id = current_pres_id + 1;
     }
 
     function last_prescription(uint aadhaar) view public returns (string memory) {

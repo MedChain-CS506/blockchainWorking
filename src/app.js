@@ -4,6 +4,8 @@ App = {
     web3Provider: null,
     contracts: {},
     med_chain: null,
+    medical_hist: {},
+
 
     initWeb3: async function () {
         if (window.ethereum) {
@@ -102,7 +104,7 @@ App = {
             disease: temp,
             symptoms: temp,
             medicine: temp,
-            time: 100
+            time: temp
         };
 
         web3.eth.getAccounts(function (error, accounts) {
@@ -192,6 +194,78 @@ App = {
                     });
             }).then( function(res){
                 console.log(res);
+            }).catch(function (err) {
+                console.log(err.message);
+            });
+        });
+    },
+
+    medical_history_details: function(){
+        var medical_history_instance;
+        var samplePatient = {
+            aadhaar: 19,
+            age: 20
+        };
+        web3.eth.getAccounts(function (error, accounts) {
+            if (error) {
+                console.log(error);
+            }
+            var account = accounts[0];
+            contractMed.deployed().then(function (instance) {
+                medical_history_instance = instance;
+                console.log(medical_history_instance);
+                return medical_history_instance.medical_history_details(samplePatient.aadhaar, {
+                        from: account
+                    });
+            }).then( function(res){
+                console.log(res);
+            }).catch(function (err) {
+                console.log(err.message);
+            });
+        });
+    },
+
+    combined: function () {
+        var medical_history_instance;
+        var samplePatient = {
+            aadhaar: 19,
+            age: 20
+        };
+        web3.eth.getAccounts(function (error, accounts) {
+            if (error) {
+                console.log(error);
+            }
+            var account = accounts[0];
+            contractMed.deployed().then(function (instance) {
+                medical_history_instance = instance;
+                return medical_history_instance.medical_history_details(samplePatient.aadhaar, {
+                        from: account
+                    });
+            }).then( function(res){
+                console.log("inside 1st")
+                App.medical_hist.ids = res[0];
+                App.medical_hist.doctor_ids = res[1];
+                App.medical_hist.symptoms = res[2];
+                web3.eth.getAccounts(function (error, accounts) {
+                    if (error) {
+                        console.log(error);
+                    }
+                    var account = accounts[0];
+                    contractMed.deployed().then(function (instance) {
+                        medical_history_instance = instance;
+                        return medical_history_instance.medical_history(samplePatient.aadhaar, {
+                            from: account
+                        });
+                    }).then( function(res){
+                        console.log("inside 2st")
+                        App.medical_hist.disease = res[0];
+                        App.medical_hist.medicine = res[1];
+                        App.medical_hist.timestamp = res[2];
+                        console.log(App.medical_hist);
+                    }).catch(function (err) {
+                        console.log(err.message);
+                    });
+                });
             }).catch(function (err) {
                 console.log(err.message);
             });
