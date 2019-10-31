@@ -85,7 +85,7 @@ App = {
                         from: account
                     });
             }).then( function(res){
-                console.log(res[0]);
+                console.log(res);
             }).catch(function (err) {
                 console.log(err.message);
             });
