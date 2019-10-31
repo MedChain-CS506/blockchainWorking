@@ -171,6 +171,31 @@ App = {
                 console.log(err.message);
             });
         });
+    },
+
+    medical_history: function(){
+        var medical_history_instance;
+        var samplePatient = {
+            aadhaar: 19,
+            age: 20
+        };
+        web3.eth.getAccounts(function (error, accounts) {
+            if (error) {
+                console.log(error);
+            }
+            var account = accounts[0];
+            contractMed.deployed().then(function (instance) {
+                medical_history_instance = instance;
+                console.log(medical_history_instance);
+                return medical_history_instance.medical_history(samplePatient.aadhaar, {
+                        from: account
+                    });
+            }).then( function(res){
+                console.log(res);
+            }).catch(function (err) {
+                console.log(err.message);
+            });
+        });
     }
 
 };
