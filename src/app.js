@@ -1,8 +1,8 @@
+//import { lookup } from "dns";
 var contractMed = null;
 App = {
     web3Provider: null,
     contracts: {},
-    med_chain: null,
 
     initWeb3: async function() {
         if (window.ethereum) {
@@ -37,15 +37,20 @@ App = {
             App.contracts.med_chain = TruffleContract(med_chain_Artifact);
 
             App.contracts.med_chain.setProvider(App.web3Provider);
-            App.med_chain = TruffleContract(med_chain_Artifact);
-            App.med_chain.setProvider(App.web3Provider);
+            console.log(App.contracts.med_chain);
+           // App.med_chain = TruffleContract(med_chain_Artifact);
+           // App.med_chain.setProvider(App.web3Provider);
             contractMed = App.contracts.med_chain;
 
-            console.log(App.contracts.med_chain);
+            console.log(contractMed);
             //console.log(App.contracts.med_chain.deployed());
-
-            return App.add_paitent();
-
+            document.getElementById("testAddPatient").addEventListener("click", function(){
+                
+                document.getElementById("paitentdata").innerHTML = "works";
+                return App.add_paitent();
+            });
+          //  return App.add_paitent();
+           // return App.lookup_paitent();
             // Set the provider for our contract
 
 
@@ -56,7 +61,7 @@ App = {
 
     add_paitent: function() {
         var add_paitent_instance;
-        var contract = App.contracts.med_chain;
+      //  var contract = App.contracts.med_chain;
 
         var temp = web3.toAscii("Name");
         var samplePatient = {
@@ -65,9 +70,42 @@ App = {
             name: temp,
             dob: temp,
             weight: 100,
-            allergies: temp
+            allergies: [temp, temp]
         };
 
+       
+        console.log(contractMed);
+        web3.eth.getAccounts(function(error, accounts) {
+            if (error) {
+
+                console.log(error);
+            }
+
+            var account = accounts[0];
+           // console.log(App.contracts.med_chain);
+            //App.med_chain = App.med_chain.deployed();
+            console.log(contractMed);
+            contractMed.deployed().then(function(instance) {
+                add_paitent_instance = instance;
+                console.log(add_paitent_instance);
+                // Execute adopt as a transaction by sending account
+                return add_paitent_instance.add_paitent(samplePatient.aadhaar, samplePatient.age, samplePatient.name,
+                    samplePatient.dob, samplePatient.weight, {
+                        from: account
+                    });
+            }).then(function(result) {
+                return App.add_paitent();
+            }).catch(function(err) {
+                console.log(err.message);
+            });
+        });
+    },
+    lookup_paitent: function() {
+        var lookup_instance;
+      //  var contract = App.contracts.med_chain;
+
+        var temp = web3.toAscii("Name");
+        var aadhaarSample = 19;
        
 
         web3.eth.getAccounts(function(error, accounts) {
@@ -81,24 +119,25 @@ App = {
 
             
             //App.med_chain = App.med_chain.deployed();
-            console.log(contractMed);
-            contractMed.deployed().then(function(instance) {
-                add_paitent_instance = instance;
-                console.log(add_paitent_instance);
+           // console.log(A);
+           contractMed.deployed().then(function(instance) {
+                lookup_instance = instance;
+                console.log(lookup_instance);
                 // Execute adopt as a transaction by sending account
-                return add_paitent_instance.add_paitent(samplePatient.aadhaar, samplePatient.age, samplePatient.name,
-                    samplePatient.dob, samplePatient.weight, samplePatient.allergies, {
+                return lookup_instance.lookup_paitent(aadhaarSample, {
                         from: account
                     });
             }).then(function(result) {
-                return App.add_paitent();
+                return App.lookup_paitent();
             }).catch(function(err) {
                 console.log(err.message);
             });
         });
     }
 
+
 };
+
 
 $(function() {
     $(window).on("load", function() {
