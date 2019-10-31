@@ -40,6 +40,7 @@ contract med_chain {
     }
 
     struct prescription {
+        uint id;
         uint doctor_id;
         uint paitent_aadhaar;
         string disease;
@@ -56,6 +57,7 @@ contract med_chain {
     mapping (uint => pharmacy) pharmacy_id_mapping;
     mapping (uint => prescription) prescription_id_mapping;
     mapping (uint => admin) admin_id_mapping;
+    uint current_pres_id = 1;
 
     modifier only_doctor(uint d_id) {
         if(doctor_id_mapping[d_id].doctor_address == msg.sender){
@@ -130,11 +132,18 @@ contract med_chain {
     
 
     function medical_history() public {
-
+        
     }
 
-    function add_prescription() public {
-        
+    function add_prescription(uint d_id, uint p_aadhar, string memory disease, string memory symptoms, string memory medicine, string memory time) public {
+        paitent_aadhaar_mapping[p_aadhar].prescription_ids.push(current_pres_id);
+        prescription_id_mapping[current_pres_id].id = current_pres_id;
+        prescription_id_mapping[current_pres_id].doctor_id = d_id;
+        prescription_id_mapping[current_pres_id].paitent_aadhaar = p_aadhar;
+        prescription_id_mapping[current_pres_id].disease = disease;
+        prescription_id_mapping[current_pres_id].symptoms = symptoms;
+        prescription_id_mapping[current_pres_id].medicine = medicine;
+        prescription_id_mapping[current_pres_id].timestamp_prescribed = time;
     }
 
     function last_prescription(uint aadhaar) view public returns (string memory) {

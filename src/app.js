@@ -91,6 +91,86 @@ App = {
                 console.log(err.message);
             });
         });
+    },
+
+    add_prescription: function () {
+        var add_paitent_instance;
+        var temp = "temp";
+        var samplePres = {
+            d_id: 1,
+            aadhaar: 19,
+            disease: temp,
+            symptoms: temp,
+            medicine: temp,
+            time: 100
+        };
+
+        web3.eth.getAccounts(function (error, accounts) {
+            if (error) {
+                console.log(error);
+            }
+            var account = accounts[0];
+            contractMed.deployed().then(function (instance) {
+                add_paitent_instance = instance;
+                console.log(add_paitent_instance);
+                return add_paitent_instance.add_prescription(samplePres.d_id, samplePres.aadhaar, samplePres.disease,
+                    samplePres.symptoms, samplePres.medicine, samplePres.time, {
+                        from: account
+                    });
+            }).catch(function (err) {
+                console.log(err.message);
+            });
+        });
+    },
+
+    doctor_last_prescription: function(){
+        var lookup_paitent_instance;
+        var samplePatient = {
+            aadhaar: 19,
+            age: 20
+        };
+        web3.eth.getAccounts(function (error, accounts) {
+            if (error) {
+                console.log(error);
+            }
+            var account = accounts[0];
+            contractMed.deployed().then(function (instance) {
+                lookup_paitent_instance = instance;
+                console.log(lookup_paitent_instance);
+                return lookup_paitent_instance.doctor_last_prescription(samplePatient.aadhaar, {
+                        from: account
+                    });
+            }).then( function(res){
+                console.log(res);
+            }).catch(function (err) {
+                console.log(err.message);
+            });
+        });
+    },
+
+    last_prescription: function(){
+        var lookup_paitent_instance;
+        var samplePatient = {
+            aadhaar: 19,
+            age: 20
+        };
+        web3.eth.getAccounts(function (error, accounts) {
+            if (error) {
+                console.log(error);
+            }
+            var account = accounts[0];
+            contractMed.deployed().then(function (instance) {
+                lookup_paitent_instance = instance;
+                console.log(lookup_paitent_instance);
+                return lookup_paitent_instance.last_prescription(samplePatient.aadhaar, {
+                        from: account
+                    });
+            }).then( function(res){
+                console.log(res);
+            }).catch(function (err) {
+                console.log(err.message);
+            });
+        });
     }
 
 };
