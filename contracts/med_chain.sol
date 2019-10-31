@@ -18,7 +18,7 @@ contract med_chain {
         bytes32 name;
         bytes32 dob;
         uint weight;
-        bytes32 allergies;
+        bytes32[] allergies;
         bytes32[] disease_history;
         uint[] prescription_ids;
         uint[] doctor_ids;
@@ -84,14 +84,16 @@ contract med_chain {
         }
     }
 
-    function add_paitent(uint aadhaar, uint age, bytes32 name, bytes32 dob, uint weight, bytes32 allergies) public {
+    function add_paitent(uint aadhaar, uint age, bytes32 name, bytes32 dob, uint weight) public {
         paitent_aadhaar_mapping[aadhaar].aadhaar = aadhaar;
         paitent_aadhaar_mapping[aadhaar].age = age;
         paitent_aadhaar_mapping[aadhaar].name = name;
         paitent_aadhaar_mapping[aadhaar].dob = dob;
         paitent_aadhaar_mapping[aadhaar].weight = weight;
+       // for(uint i = 0; i < allergies.length; i++) {
+        //    paitent_aadhaar_mapping[aadhaar].allergies[i]  = (allergies[i]);
+       // }
         paitent_aadhaar_mapping[aadhaar].paitent_address = msg.sender;
-        paitent_aadhaar_mapping[aadhaar].allergies = allergies;
     }
 
     function add_doctor(uint id, uint license_no, bytes32 name, bytes32 specialisation, address d_addr) public {
@@ -108,14 +110,14 @@ contract med_chain {
         pharmacy_id_mapping[id].phar_addr = p_addr;
     }
 
-    function lookup_paitent(uint aadhaar) view public returns (uint, uint, bytes32, bytes32, uint, bytes32[] memory, bytes32[] memory)
+    function lookup_paitent(uint aadhaar) view public returns (uint, uint, bytes32, bytes32, uint, bytes32[] memory)
     {
-        bytes32[] memory allergies;
+       // bytes32[] memory allergies;
         bytes32[] memory disease;
 
-        for (uint i = 0; i < paitent_aadhaar_mapping[aadhaar].allergies.length; i++) {
-            allergies[i] = paitent_aadhaar_mapping[aadhaar].allergies[i];
-        }
+        //for (uint i = 0; i < paitent_aadhaar_mapping[aadhaar].allergies.length; i++) {
+       //     allergies[i] = paitent_aadhaar_mapping[aadhaar].allergies[i];
+        //}
 
         for (uint i = 0; i < paitent_aadhaar_mapping[aadhaar].disease_history.length; i++) {
             disease[i] = paitent_aadhaar_mapping[aadhaar].disease_history[i];
@@ -127,7 +129,7 @@ contract med_chain {
             paitent_aadhaar_mapping[aadhaar].name,
             paitent_aadhaar_mapping[aadhaar].dob,
             paitent_aadhaar_mapping[aadhaar].weight,
-            allergies,
+            //allergies,
             disease
         );
     }
