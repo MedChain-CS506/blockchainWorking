@@ -241,7 +241,6 @@ App = {
                 App.paitent_page_data.dob = res[4]; 
                 App.paitent_page_data.weight = res[5].c[0];                 
                 App.paitent_page_data.allergies = res[6];                 
-                console.log("Inside 1st");
                 var doctor_last_prescription_instance;
                 web3.eth.getAccounts(function (error, accounts) {
                     if (error) {
@@ -254,7 +253,6 @@ App = {
                             from: account
                         });
                     }).then(function (res) {
-                        console.log("Inside 2nd");
                         App.paitent_page_data.last_pres_id = res[0].c[0];
                         App.paitent_page_data.last_pres_medicine = res[1];
                         App.paitent_page_data.last_pres_doc_id = res[2].c[0];
